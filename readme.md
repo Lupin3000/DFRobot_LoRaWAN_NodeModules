@@ -1,19 +1,15 @@
 # Gravity: LoRaWAN Node Module 
 
-## Python (serial)
-
-Set the dial switch to UART and connect the node modules.
-
-![serial connection example](img/serial_connection.jpg)
+## Python (_serial_)
 
 ### Quick Installation
 
 ```shell
 # clone project
-$ git clone ...
+$ git clone https://github.com/Lupin3000/DFRobot_LoRaWAN_NodeModules.git
 
 # change into cloned project directory
-$ cd 
+$ cd DFRobot_LoRaWAN_NodeModules/
 
 # create python virtualenv (optional)
 $ python3 -m venv .venv
@@ -31,7 +27,11 @@ $ source venv/bin/activate
 (.venv) $ pip3 freeze
 ```
 
-### Run LoRa (P2P) example
+### Run LoRa (P2P) serial example
+
+Set the dial switch to UART and connect the node modules.
+
+![serial connection example](img/serial_connection.jpg)
 
 Before running the examples to send and receive data. Ensure the configuration settings meet your requirements! Therefor, adapt files `conf/lora_configuration.py` and `conf/serial_configuration.py`.
 
