@@ -1,5 +1,7 @@
 # Gravity: LoRaWAN Node Module 
 
+[![Static](https://img.shields.io/badge/python-==3.12.2-green)](https://python.org)
+
 ## Python (_serial_)
 
 ### Quick Installation
