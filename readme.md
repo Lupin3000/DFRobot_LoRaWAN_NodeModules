@@ -6,6 +6,8 @@ You can find the details about LoRaWAN Node Modules on the DFRobot [Wiki](https:
 
 ## Python (_serial_)
 
+The Python serial module supports LoRa and LoRaWAN modes for EU868/US915/CN470.
+
 ### Quick Installation
 
 ```shell
@@ -19,7 +21,7 @@ $ cd DFRobot_LoRaWAN_NodeModules/
 $ python3 -m venv .venv
 
 # activate Python virtualenv (macOS & Linux)
-$ source venv/bin/activate
+$ source .venv/bin/activate
 
 # update pip (optional)
 (.venv) $ pip3 install -U pip
