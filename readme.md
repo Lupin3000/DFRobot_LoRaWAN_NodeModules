@@ -2,6 +2,8 @@
 
 [![Static](https://img.shields.io/badge/python-==3.12.2-green)](https://python.org)
 
+You can find the details about LoRaWAN Node Modules on the DFRobot [Wiki](https://wiki.dfrobot.com/SKU_DFR1115-868_Gravity_LoRaWAN_Node_Module_EU868) page. The original CPP drivers and Arduino examples are available on DFRobots [GitHub](https://github.com/cdjq/DFRobot_LWNode) repository.
+
 ## Python (_serial_)
 
 ### Quick Installation
