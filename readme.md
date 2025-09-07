@@ -94,11 +94,11 @@ If MicroPython is not flashed on the ESP device, download the latest firmware fr
 
 ```
 # send messages
-Sending message: Hello (0)
-Sending message: Hello (1)
-Sending message: Hello (2)
-Sending message: Hello (3)
-Sending message: Hello (4)
+Sending payload: Hello (0)
+Sending payload: Hello (1)
+Sending payload: Hello (2)
+Sending payload: Hello (3)
+Sending payload: Hello (4)
 
 # receive messages
 Received payload: Hello (0)

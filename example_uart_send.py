@@ -27,5 +27,5 @@ if __name__ == '__main__':
         sleep(5)
         msg = f'Hello ({i})'
 
-        print(f'Sending message: {msg}')
+        print(f'Sending payload: {msg}')
         lora.send_data(target_id=2, data=msg)
