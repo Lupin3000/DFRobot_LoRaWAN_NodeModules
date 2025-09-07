@@ -5,20 +5,16 @@
 
 You can find the details about LoRaWAN Node Modules on the DFRobot [Wiki](https://wiki.dfrobot.com/SKU_DFR1115-868_Gravity_LoRaWAN_Node_Module_EU868) page. The original CPP drivers and Arduino examples are available on DFRobots [GitHub](https://github.com/cdjq/DFRobot_LWNode) repository.
 
-## Python (_serial_)
-
-The Python serial module supports LoRa and LoRaWAN modes for EU868/US915/CN470.
-
-### Quick Installation
+## Preparation
 
 ```shell
-# clone project
+# clone GitHub project
 $ git clone https://github.com/Lupin3000/DFRobot_LoRaWAN_NodeModules.git
 
 # change into cloned project directory
 $ cd DFRobot_LoRaWAN_NodeModules/
 
-# create python virtualenv (optional)
+# create Python virtualenv (optional)
 $ python3 -m venv .venv
 
 # activate Python virtualenv (macOS & Linux)
@@ -26,8 +22,16 @@ $ source .venv/bin/activate
 
 # update pip (optional)
 (.venv) $ pip3 install -U pip
+```
 
-# install required dependencies
+## Python (_serial_)
+
+The Python serial module supports LoRa and LoRaWAN modes for EU868/US915/CN470.
+
+### Quick Installation
+
+```shell
+# install required Python dependencies
 (.venv) $ pip3 install -r serial_requirements.txt
 
 # show packages (optional)
@@ -75,22 +79,7 @@ The MicroPython UART module supports LoRa and LoRaWAN modes for EU868/US915/CN47
 ### Quick Installation
 
 ```shell
-# clone project
-$ git clone https://github.com/Lupin3000/DFRobot_LoRaWAN_NodeModules.git
-
-# change into cloned project directory
-$ cd DFRobot_LoRaWAN_NodeModules/
-
-# create python virtualenv (optional)
-$ python3 -m venv .venv
-
-# activate Python virtualenv (macOS & Linux)
-$ source .venv/bin/activate
-
-# update pip (optional)
-(.venv) $ pip3 install -U pip
-
-# install required dependencies
+# install required MicroPython dependencies
 (.venv) $ pip3 install -r uart_requirements.txt
 
 # show packages (optional)
