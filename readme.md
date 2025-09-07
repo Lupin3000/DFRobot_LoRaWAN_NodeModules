@@ -92,6 +92,17 @@ If MicroPython is not flashed on the ESP device, download the latest firmware fr
 
 After that, use rshell to connect to the ESP device and upload the required directories and files. Rename the `example_uart_*.py` to `main.py`!
 
+```
+ESP
+├── boot.py
+├── conf
+│   ├── lora_configuration.py
+│   └── uart_configuration.py
+├── lib
+│   └── uart_module_driver.py
+└── main.py
+```
+
 ### Run LoRa (P2P) UART example
 
 ```
