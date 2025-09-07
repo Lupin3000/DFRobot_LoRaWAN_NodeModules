@@ -38,6 +38,19 @@ The Python serial module supports LoRa and LoRaWAN modes for EU868/US915/CN470.
 (.venv) $ pip3 freeze
 ```
 
+Serial P2P example files are located in the `example_serial_*.py` files.
+
+```
+Project
+├── conf
+│   ├── lora_configuration.py
+│   └── serial_configuration.py
+├── lib
+│   └── uart_module_driver.py
+├── example_serial_receive.py
+└── example_serial_send.py
+```
+
 ### Run LoRa (P2P) serial example
 
 Set the dial switch to UART and connect the node modules.
@@ -90,7 +103,7 @@ If MicroPython is not flashed on the ESP device, download the latest firmware fr
 
 > **Note:** In case you are not familiar with command line tools like esptool, try [MicroPython-Firmware-Studio](https://github.com/Lupin3000/MicroPython-Firmware-Studio).
 
-After that, use rshell to connect to the ESP device and upload the required directories and files. Rename the `example_uart_*.py` to `main.py`!
+After that, use rshell to connect to the ESP device and upload the required directories and files. Rename the P2P example files like `example_uart_*.py` to `main.py`!
 
 ```
 ESP
@@ -116,7 +129,6 @@ Sending payload: Hello (4)
 
 # receive LoRa payload (example_uart_receive.py)
 
-Received payload: Hello (0)
 Received payload: Hello (0)
 Received payload: Hello (1)
 Received payload: Hello (2)
