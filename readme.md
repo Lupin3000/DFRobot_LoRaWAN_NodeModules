@@ -46,7 +46,7 @@ Project
 │   ├── lora_configuration.py
 │   └── serial_configuration.py
 ├── lib
-│   └── uart_module_driver.py
+│   └── serial_module_driver.py
 ├── example_serial_receive.py
 └── example_serial_send.py
 ```
