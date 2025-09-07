@@ -140,8 +140,26 @@ class NodeModuleDriver:
 
     def receive_data(self):
         raw = self._send_command('RECV')
+        value = ''
 
         if not raw:
             return None
 
-        return raw
+        for line in raw.splitlines():
+            if line.strip() in ("+RECV=OK", "The list is empty!"):
+                continue
+
+            if "The list is empty!" in line:
+                line = line.split("The list is empty!")[0].rstrip()
+
+            if line.startswith("+RECV="):
+                parts = line.split("\t", 1)
+                if len(parts) == 2:
+                    value = parts[1]
+                else:
+                    value = line.split(" ", 1)[-1]
+
+        if value:
+            return value
+        else:
+            return None
