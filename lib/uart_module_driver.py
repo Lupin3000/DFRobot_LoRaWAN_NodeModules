@@ -105,6 +105,9 @@ class NodeModuleDriver:
 
         self._send_command(f'SF={value}')
 
+    def enable_receive_mode(self):
+        self._send_command('RECV=1')
+
     def test_device(self):
         print(self._send_command(''))
 
@@ -134,3 +137,11 @@ class NodeModuleDriver:
         payload = to_hex + from_hex + data_hex
 
         self._send_command(f'SEND={payload}')
+
+    def receive_data(self):
+        raw = self._send_command('RECV')
+
+        if not raw:
+            return None
+
+        return raw
