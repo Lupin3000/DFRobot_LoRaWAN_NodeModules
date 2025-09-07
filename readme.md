@@ -1,6 +1,7 @@
 # Gravity: LoRaWAN Node Module 
 
 [![Static](https://img.shields.io/badge/python-==3.12.2-green)](https://python.org)
+[![Static](https://img.shields.io/badge/MicroPython-==1.25.0-green)](https://micropython.org)
 
 You can find the details about LoRaWAN Node Modules on the DFRobot [Wiki](https://wiki.dfrobot.com/SKU_DFR1115-868_Gravity_LoRaWAN_Node_Module_EU868) page. The original CPP drivers and Arduino examples are available on DFRobots [GitHub](https://github.com/cdjq/DFRobot_LWNode) repository.
 
@@ -47,11 +48,11 @@ Before running the examples to send and receive data. Ensure the configuration s
 # start serial receive
 (.venv) $ python3 example_serial_receive.py
 
-From: 1 → To: 2 | Payload: Hello (0)
-From: 1 → To: 2 | Payload: Hello (1)
-From: 1 → To: 2 | Payload: Hello (2)
-From: 1 → To: 2 | Payload: Hello (3)
-From: 1 → To: 2 | Payload: Hello (4)
+Received payload: Hello (0)
+Received payload: Hello (1)
+Received payload: Hello (2)
+Received payload: Hello (3)
+Received payload: Hello (4)
 [INFO] Closing serial connection.
 [INFO] Exiting...
 [INFO] Closing application...
@@ -59,10 +60,57 @@ From: 1 → To: 2 | Payload: Hello (4)
 # start serial send
 (.venv) $ python3 example_serial_send.py
 
-Sending data: Hello (0)
-Sending data: Hello (1)
-Sending data: Hello (2)
-Sending data: Hello (3)
-Sending data: Hello (4)
+Received payload: Hello (0)
+Received payload: Hello (1)
+Received payload: Hello (2)
+Received payload: Hello (3)
+Received payload: Hello (4)
 [INFO] Closing application...
+```
+
+## MicroPython (_UART_)
+
+The MicroPython UART module supports LoRa and LoRaWAN modes for EU868/US915/CN470.
+
+### Quick Installation
+
+```shell
+# clone project
+$ git clone https://github.com/Lupin3000/DFRobot_LoRaWAN_NodeModules.git
+
+# change into cloned project directory
+$ cd DFRobot_LoRaWAN_NodeModules/
+
+# create python virtualenv (optional)
+$ python3 -m venv .venv
+
+# activate Python virtualenv (macOS & Linux)
+$ source .venv/bin/activate
+
+# update pip (optional)
+(.venv) $ pip3 install -U pip
+
+# install required dependencies
+(.venv) $ pip3 install -r uart_requirements.txt
+
+# show packages (optional)
+(.venv) $ pip3 freeze
+```
+
+If MicroPython is not flashed on the ESP device, download the latest firmware from [MicroPython](https://micropython.org/download/). The next step is to flash the MicroPython firmware on the ESP device via the esptool. After that, use rshell to connect to the ESP device and upload the required directories and files.
+
+```
+# send messages
+Sending message: Hello (0)
+Sending message: Hello (1)
+Sending message: Hello (2)
+Sending message: Hello (3)
+Sending message: Hello (4)
+
+# receive messages
+Received payload: Hello (0)
+Received payload: Hello (1)
+Received payload: Hello (2)
+Received payload: Hello (3)
+Received payload: Hello (4)
 ```
