@@ -57,8 +57,10 @@ if __name__ == "__main__":
 
             for i in range(5):
                 sleep(5)
-                print(f"Sending data: Hello ({i})")
-                lora.send_data(target_id=SERIAL_CONFIGURATION['serial_receive_id'], data=f'Hello ({i})')
+                msg = f'Hello ({i})'
+
+                print(f'Sending message: {msg}')
+                lora.send_data(target_id=SERIAL_CONFIGURATION['serial_receive_id'], data=msg)
     except KeyboardInterrupt:
         info("Exiting...")
     finally:

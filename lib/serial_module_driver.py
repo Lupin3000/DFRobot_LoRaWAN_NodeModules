@@ -759,22 +759,26 @@ class NodeModuleDriver:
         :rtype: Optional[str]
         """
         raw = self._send_command('RECV')
+        value = ''
 
         if not raw:
             return None
 
-        lines = [line.strip() for line in raw.splitlines() if line.strip()]
-        ignored = {"The list is empty!", "+RECV=OK"}
-
-        for line in lines:
-            if line in ignored:
+        for line in raw.splitlines():
+            if line.strip() in ("+RECV=OK", "The list is empty!"):
                 continue
+
+            if "The list is empty!" in line:
+                line = line.split("The list is empty!")[0].rstrip()
+
             if line.startswith("+RECV="):
-                payload = line[6:]
+                parts = line.split("\t", 1)
+                if len(parts) == 2:
+                    value = parts[1]
+                else:
+                    value = line.split(" ", 1)[-1]
 
-                if "The list is empty!" in payload:
-                    payload = payload.replace("The list is empty!", "").strip()
-
-                return payload
-
-        return None
+        if value:
+            return value
+        else:
+            return None

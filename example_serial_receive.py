@@ -58,19 +58,7 @@ def receive_loop(lora_device: NodeModuleDriver, callback: Callable[[str], None])
 
 def on_data_received(data: str) -> None:
     if data:
-        try:
-            to_id = ord(data[0])
-            from_id = ord(data[1])
-            payload = data[2:]
-
-            clean_payload = ''.join(c for c in payload if c.isprintable())
-            clean_payload = clean_payload.lstrip("=> \t\r\n")
-
-            print(f"From: {from_id} → To: {to_id} | Payload: {clean_payload}")
-
-        except Exception as e:
-            error(f"Failed to parse received data: {e}")
-            error(f"Raw data: {repr(data)}")
+        print(f'Received payload: {data}')
 
 
 if __name__ == "__main__":
