@@ -62,6 +62,14 @@ class NodeModuleDriver:
 
         return response or None
 
+    def _receive_raw_data(self):
+        raw_data = self._send_command('RECV')
+
+        if not raw_data:
+            return None
+        else:
+            return raw_data
+
     def set_lora_mode(self, mode: str):
         if mode not in self._VALID_LORA_MODES:
             raise ValueError(f"Invalid LoRa mode. Allowed modes: {self._VALID_LORA_MODES}")
@@ -139,13 +147,10 @@ class NodeModuleDriver:
         self._send_command(f'SEND={payload}')
 
     def receive_data(self):
-        raw = self._send_command('RECV')
-        value = ''
+        value = None
+        raw_response = self._send_command('RECV?')
 
-        if not raw:
-            return None
-
-        for line in raw.splitlines():
+        for line in raw_response.splitlines():
             if line.strip() in ("+RECV=OK", "The list is empty!"):
                 continue
 

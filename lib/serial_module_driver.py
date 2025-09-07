@@ -211,6 +211,20 @@ class NodeModuleDriver:
 
         return response or None
 
+    def _receive_raw_data(self) -> Optional[str]:
+        """
+        Processes and retrieves raw data received from the 'RECV' command.
+
+        :return: The raw data received as a string, or None if no data is available.
+        :rtype: Optional[str]
+        """
+        raw_data = self._send_command('RECV')
+
+        if not raw_data:
+            return None
+        else:
+            return raw_data
+
     def set_lora_mode(self, mode: str) -> None:
         """
         Sets the operating mode for LoRa communication. This method configures
@@ -758,13 +772,10 @@ class NodeModuleDriver:
         :return: Processed payload as a string if it exists, otherwise None.
         :rtype: Optional[str]
         """
-        raw = self._send_command('RECV')
-        value = ''
+        value = None
+        raw_response = self._send_command('RECV?')
 
-        if not raw:
-            return None
-
-        for line in raw.splitlines():
+        for line in raw_response.splitlines():
             if line.strip() in ("+RECV=OK", "The list is empty!"):
                 continue
 
