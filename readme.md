@@ -99,6 +99,10 @@ $ source .venv/bin/activate
 
 If MicroPython is not flashed on the ESP device, download the latest firmware from [MicroPython](https://micropython.org/download/). The next step is to flash the MicroPython firmware on the ESP device via the esptool. After that, use rshell to connect to the ESP device and upload the required directories and files.
 
+> **Note:** In case you are not familiar with command line tools like esptool, try [MicroPython-Firmware-Studio](https://github.com/Lupin3000/MicroPython-Firmware-Studio).
+
+### Run LoRa (P2P) UART example
+
 ```
 # send messages
 Sending message: Hello (0)
