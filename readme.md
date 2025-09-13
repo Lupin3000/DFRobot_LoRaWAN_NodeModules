@@ -24,6 +24,10 @@ $ source .venv/bin/activate
 (.venv) $ pip3 install -U pip
 ```
 
+Ensure that the protocol switch is set to UART on the LoRaWAN Node module.
+
+![i2c_uart_switch.jpg](img/i2c_uart_switch.jpg)
+
 ## Python (_serial_)
 
 The Python serial module supports LoRa and LoRaWAN modes for EU868/US915/CN470.
