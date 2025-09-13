@@ -6,10 +6,18 @@ class NodeModuleDriver:
 
     _VALID_LORA_MODES: tuple = ('LORA', 'LORAWAN')
     _VALID_REGIONS: tuple = ('EU868', 'US915', 'CN470')
+    _VALID_JOIN_TYPES: tuple = ('OTAA', 'ABP')
+    _VALID_NET_TYPES: tuple = ('CLASS_A', 'CLASS_C')
+    _VALID_PACKET_TYPES: tuple = ('CONFIRMED', 'UNCONFIRMED')
     _VALID_FREQUENCY_RANGES: dict = {
         'EU868': (863000000, 870000000),
         'US915': (902000000, 928000000),
         'CN470': (470000000, 510000000),
+    }
+    _VALID_DATA_RANGES: dict = {
+        'EU868': range(0, 6),
+        'US915': range(0, 4),
+        'CN470': range(0, 6)
     }
     _VALID_TRANSMIT_POWERS: tuple = range(0, 30, 2)
     _VALID_BANDWIDTHS: tuple = (125000, 250000, 500000)
@@ -28,6 +36,20 @@ class NodeModuleDriver:
             self._uart = UART(uart_instance, baudrate=baudrate, tx=Pin(tx), rx=Pin(rx))
         except Exception as err:
             raise RuntimeError(f"[ERROR] Failed to init UART{uart_instance} on TX={tx}, RX={rx}: {err}")
+
+    def _required_lora_mode(self, expected: str):
+        if self._mode is None:
+            raise ValueError("LoRa mode must be set before this operation")
+
+        if self._mode != expected:
+            raise ValueError(f"This operation requires mode: {expected}")
+
+    def _required_join_type(self, expected: str):
+        if self._join_type is None:
+            raise ValueError("LoRa join type must be set before this operation")
+
+        if self._join_type != expected:
+            raise RuntimeError(f"This operation requires join type: {expected}")
 
     def _required_region(self):
         if self._region is None:
@@ -113,6 +135,118 @@ class NodeModuleDriver:
 
         self._send_command(f'SF={value}')
 
+    def set_data_rate(self, value: int):
+        self._required_lora_mode('LORAWAN')
+        self._required_region()
+
+        if value not in self._VALID_DATA_RANGES[self._region]:
+            raise ValueError(f"Invalid data rate for region {self._region}.")
+
+        self._send_command(f'+DATARATE={value}')
+
+    def set_dev_type(self, value: str):
+        self._required_lora_mode('LORAWAN')
+
+        class_type = value.upper()
+
+        if class_type not in self._VALID_NET_TYPES:
+            raise ValueError("Device class must be CLASS_A or CLASS_C")
+
+        self._send_command(f'CLASS={class_type}')
+
+    def set_sub_band(self, value: int):
+        self._required_lora_mode('LORAWAN')
+
+        if self._region not in {'US915', 'CN470'}:
+            raise ValueError("Sub-band selection is only available for US915 and CN470 regions")
+
+        if not (0 <= value <= 15):
+            raise ValueError("Sub-band must be between 0 and 15")
+
+        self._send_command(f'SUBBAND={value}')
+
+    def set_packet_type(self, value: str):
+        self._required_lora_mode('LORAWAN')
+
+        mode = value.upper()
+
+        if mode not in self._VALID_PACKET_TYPES:
+            raise ValueError("Packet type must be either CONFIRMED or UNCONFIRMED")
+
+        self._send_command(f'UPLINKTYPE={mode}')
+
+    def set_join_type(self, value: str):
+        self._required_lora_mode('LORAWAN')
+
+        join_type = value.upper()
+
+        if join_type not in self._VALID_JOIN_TYPES:
+            raise ValueError("Join type must be either OTAA or ABP")
+
+        self._join_type = join_type
+        self._send_command(f'JOINTYPE={join_type}')
+
+    def set_app_eui(self, value: str):
+        self._required_lora_mode('LORAWAN')
+        self._required_join_type('OTAA')
+
+        app_eui = value.upper()
+
+        if len(app_eui) != 16:
+            raise ValueError("AppEUI must be 16 characters (8 bytes in hex)")
+
+        self._send_command(f'JOINEUI={app_eui}')
+
+    def set_app_key(self, value: str):
+        self._required_lora_mode('LORAWAN')
+        self._required_join_type('OTAA')
+
+        app_key = value.upper()
+
+        if len(app_key) != 32:
+            raise ValueError("AppKey must be 32 characters (16 bytes in hex)")
+
+        self._send_command(f'APPKEY={app_key}')
+
+    def set_dev_addr(self, value: str):
+        self._required_lora_mode('LORAWAN')
+        self._required_join_type('ABP')
+
+        dev_addr = value.upper()
+
+        if len(dev_addr) != 8 or not all(c in '0123456789ABCDEF' for c in dev_addr):
+            raise ValueError("DevAddr must be 8 hex characters (0–9, A–F)")
+
+        self._send_command(f'DEVADDR={dev_addr}')
+
+    def set_app_skey(self, value: str):
+        self._required_lora_mode('LORAWAN')
+        self._required_join_type('ABP')
+
+        app_skey = value.upper()
+
+        if len(app_skey) != 32:
+            raise ValueError("AppSKey must be 32 characters (16 bytes in hex)")
+
+        self._send_command(f'APPSKEY={app_skey}')
+
+    def set_nwk_skey(self, value: str):
+        self._required_lora_mode('LORAWAN')
+        self._required_join_type('ABP')
+
+        nwk_skey = value.upper()
+
+        if len(nwk_skey) != 32:
+            raise ValueError("NwkSKey must be 32 characters (16 bytes in hex)")
+
+        self._send_command(f'NWKSKEY={nwk_skey}')
+
+    def enable_adr(self, value: bool):
+        self._required_lora_mode('LORAWAN')
+
+        cmd = f'ADR={1 if value else 0}'
+        self._send_command(cmd)
+
     def enable_receive_mode(self):
         self._send_command('RECV=1')
 
@@ -168,6 +302,14 @@ class NodeModuleDriver:
     def get_eirp(self):
         response = self._send_command('EIRP?')
         return response.split('=')[-1] if response else None
+
+    def is_joined(self):
+        self._required_lora_mode('LORAWAN')
+
+        response = self._send_command('JOIN?')
+        joined = response and response.strip() == '+JOIN=1'
+
+        return joined
 
     def send_data(self, target_id: int, data: str):
         if not (1 <= target_id <= 255):
