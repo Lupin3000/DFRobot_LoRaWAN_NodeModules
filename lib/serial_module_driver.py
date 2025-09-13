@@ -621,7 +621,6 @@ class NodeModuleDriver:
         :return: The frequency as a string, or None if not available.
         :rtype: Optional[str]
         """
-
         response = self._send_command('FREQS?')
         return response.split('=')[-1] if response else None
 
@@ -764,6 +763,49 @@ class NodeModuleDriver:
 
         self._send_command(f'SEND={payload}')
 
+    def receive_specific_data(self) -> Optional[str]:
+        """
+        Processes and extracts a specific data message received.
+        The data is parsed to determine if it contains a valid message payload intended
+        for the current device. If no appropriate data is found, the method will return None.
+
+        :return: The last valid payload intended for the device if found, otherwise None
+        :rtype: Optional[str]
+        """
+        raw_response = self._send_command('RECV?')
+
+        if not raw_response:
+            return None
+
+        last_msg = None
+        for line in raw_response.splitlines():
+            s = line.strip()
+
+            if not s or s in {"+RECV=OK", "The list is empty!"} or s.startswith("+RECV:NO DATA"):
+                continue
+
+            if not s.startswith("+RECV="):
+                continue
+
+            data = s[len("+RECV="):]
+            data_bytes = data if isinstance(data, bytes) else data.encode("latin1", errors="replace")
+
+            if len(data_bytes) < 2:
+                continue
+
+            to_id = data_bytes[0]
+            from_id = data_bytes[1]
+            tab_idx = data_bytes.find(b"\t")
+            payload_bytes = data_bytes[tab_idx + 1:] if tab_idx != -1 else data_bytes[2:]
+            payload = payload_bytes.decode("utf-8", errors="replace")
+
+            debug(f"To: {to_id}, From: {from_id}, Payload: {payload}")
+
+            if to_id == self._device_id:
+                last_msg = payload
+
+        return last_msg
+
     def receive_data(self) -> Optional[str]:
         """
         Processes received raw data, extracts meaningful payload, and ignores specific
@@ -775,8 +817,12 @@ class NodeModuleDriver:
         :return: Processed payload as a string if it exists, otherwise None.
         :rtype: Optional[str]
         """
-        value = None
         raw_response = self._send_command('RECV?')
+
+        if not raw_response:
+            return None
+
+        value = None
 
         for line in raw_response.splitlines():
             if line.strip() in ("+RECV=OK", "The list is empty!"):
