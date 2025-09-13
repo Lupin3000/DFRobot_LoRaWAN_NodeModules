@@ -53,7 +53,7 @@ def receive_loop(lora_device: NodeModuleDriver, callback: Callable[[str], None])
     :type lora_device: NodeModuleDriver
     :param callback: The callback function to process received data.
     :type callback: Callable[[str], None]
-    :return: This function does not return anything.
+    :return: None
     """
     while True:
         try:
