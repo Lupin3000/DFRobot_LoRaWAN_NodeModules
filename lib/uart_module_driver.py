@@ -125,6 +125,50 @@ class NodeModuleDriver:
     def start_device(self) -> None:
         self._send_command('JOIN=1')
 
+    def get_lora_mode(self):
+        response = self._send_command('LORAMODE?')
+        return response.split('=')[-1] if response else None
+
+    def get_region(self):
+        response = self._send_command('REGION?')
+        return response.split('=')[-1] if response else None
+
+    def get_frequency(self):
+        response = self._send_command('FREQS?')
+        return response.split('=')[-1] if response else None
+
+    def get_transmit_power(self):
+        response = self._send_command('EIRP?')
+        return response.split('=')[-1] if response else None
+
+    def get_bandwidth(self):
+        response = self._send_command('BW?')
+        return response.split('=')[-1] if response else None
+
+    def get_spreading_factor(self):
+        response = self._send_command('SF?')
+        return response.split('=')[-1] if response else None
+
+    def get_data_rate(self):
+        response = self._send_command('DATARATE?')
+        return response.split('=')[-1] if response else None
+
+    def get_dev_eui(self):
+        response = self._send_command('DEVEUI?')
+        return response.split('=')[-1] if response else None
+
+    def get_net_id(self):
+        response = self._send_command('NETID?')
+        return response.split('=')[-1] if response else None
+
+    def get_dev_addr(self):
+        response = self._send_command('DEVADDR?')
+        return response.split('=')[-1] if response else None
+
+    def get_eirp(self):
+        response = self._send_command('EIRP?')
+        return response.split('=')[-1] if response else None
+
     def send_data(self, target_id: int, data: str):
         if not (1 <= target_id <= 255):
             raise ValueError("Target ID must be between 1 and 255")
