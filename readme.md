@@ -64,11 +64,9 @@ Project
 
 ### Run LoRa (P2P) serial example
 
-Set the dial switch to UART and connect the node modules.
-
 ![serial connection example](img/serial_connection.jpg)
 
-_The picture shows the usage of two CH340 USB to TTL converters for each Node module._
+_The picture shows the usage of CH340 USB to TTL converters for each LoRaWAN Node module._
 
 Before running the examples to send and receive data. Ensure the configuration settings meet your requirements! Therefor, adapt files `conf/lora_configuration.py` and `conf/serial_configuration.py`.
 
@@ -128,6 +126,10 @@ ESP
 ```
 
 ### Run LoRa (P2P) UART example
+
+![uart_connection.jpg](img/uart_connection.jpg)
+
+_The picture shows the usage of ESP32 NodeMCU with LoRaWAN Node module._
 
 Before running the examples to send and receive data. Ensure the configuration settings meet your requirements! Therefor, adapt files `conf/lora_configuration.py` and `conf/uart_configuration.py`.
 
