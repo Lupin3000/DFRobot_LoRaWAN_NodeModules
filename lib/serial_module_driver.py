@@ -458,6 +458,7 @@ class NodeModuleDriver:
         app_eui = value.upper()
 
         if len(app_eui) != 16:
+            error("AppEUI must be 16 characters (8 bytes in hex)")
             raise ValueError("AppEUI must be 16 characters (8 bytes in hex)")
 
         self._send_command(f'JOINEUI={app_eui}')
@@ -478,6 +479,7 @@ class NodeModuleDriver:
         app_key = value.upper()
 
         if len(app_key) != 32:
+            error("AppKey must be 32 characters (16 bytes in hex)")
             raise ValueError("AppKey must be 32 characters (16 bytes in hex)")
 
         self._send_command(f'APPKEY={app_key}')
@@ -499,6 +501,7 @@ class NodeModuleDriver:
         dev_addr = value.upper()
 
         if len(dev_addr) != 8 or not all(c in '0123456789ABCDEF' for c in dev_addr):
+            error("DevAddr must be 8 hex characters (0–9, A–F)")
             raise ValueError("DevAddr must be 8 hex characters (0–9, A–F)")
 
         self._send_command(f'DEVADDR={dev_addr}')

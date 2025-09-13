@@ -46,6 +46,15 @@ def configure_lora_device(lora_device: NodeModuleDriver) -> None:
 
 
 def receive_loop(lora_device: NodeModuleDriver, callback: Callable[[str], None]) -> None:
+    """
+    Receives data continuously from a LoRa device and processes it using a callback function.
+
+    :param lora_device: The LoRa device instance to receive data from.
+    :type lora_device: NodeModuleDriver
+    :param callback: The callback function to process received data.
+    :type callback: Callable[[str], None]
+    :return: This function does not return anything.
+    """
     while True:
         try:
             response = lora_device.receive_data()
@@ -57,6 +66,13 @@ def receive_loop(lora_device: NodeModuleDriver, callback: Callable[[str], None])
 
 
 def on_data_received(data: str) -> None:
+    """
+    Handles incoming data by processing and displaying it if valid.
+
+    :param data: The incoming data as a string.
+    :type data: str
+    :return: None
+    """
     if data:
         print(f'Received payload: {data}')
 
