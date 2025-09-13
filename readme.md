@@ -122,6 +122,8 @@ ESP
 
 ### Run LoRa (P2P) UART example
 
+Before running the examples to send and receive data. Ensure the configuration settings meet your requirements! Therefor, adapt files `conf/lora_configuration.py` and `conf/uart_configuration.py`.
+
 ```
 # receive LoRa payload (example_uart_receive.py)
 
