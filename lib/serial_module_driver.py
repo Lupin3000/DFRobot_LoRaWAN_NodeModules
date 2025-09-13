@@ -213,17 +213,47 @@ class NodeModuleDriver:
 
     def _receive_raw_data(self) -> Optional[str]:
         """
-        Processes and retrieves raw data received from the 'RECV' command.
+        Processes and retrieves raw data received from the 'RECV?' AT-command.
 
-        :return: The raw data received as a string, or None if no data is available.
+        :return: The raw data is received as a string, or None if no data is available.
         :rtype: Optional[str]
         """
-        raw_data = self._send_command('RECV')
+        raw_data = self._send_command('RECV?')
+        debug(raw_data)
 
         if not raw_data:
             return None
         else:
             return raw_data
+
+    def _filter_raw_data(self) -> Optional[str]:
+        """
+        Processes raw data received from an internal method to filter and extract relevant
+        information. This function parses the raw response, strips unnecessary characters,
+        and selects lines that meet specific criteria. Invalid or irrelevant lines are
+        ignored during the process.
+
+        :return: A filtered string from the raw data if valid information exists, or None.
+        :rtype: Optional[str]
+        """
+        filtered_data = None
+        raw_response = self._receive_raw_data()
+
+        if not raw_response:
+            return None
+
+        for line in raw_response.splitlines():
+            s = line.strip()
+
+            if not s or s in {"+RECV=OK", "The list is empty!"} or s.startswith("+RECV:NO DATA"):
+                continue
+
+            if not s.startswith("+RECV="):
+                continue
+
+            filtered_data = line
+
+        return filtered_data
 
     def set_lora_mode(self, mode: str) -> None:
         """
@@ -555,6 +585,7 @@ class NodeModuleDriver:
         rate and power level dynamically.
 
         :param value: A boolean indicating whether to enable ADR.
+        :type value: bool
         :return: None
         """
         self._required_lora_mode('LORAWAN')
@@ -769,74 +800,54 @@ class NodeModuleDriver:
         The data is parsed to determine if it contains a valid message payload intended
         for the current device. If no appropriate data is found, the method will return None.
 
-        :return: The last valid payload intended for the device if found, otherwise None
+        :return: Extracted data as a string if successfully processed, otherwise None.
         :rtype: Optional[str]
         """
-        raw_response = self._send_command('RECV?')
+        value = None
+        response = self._filter_raw_data()
 
-        if not raw_response:
+        if not response:
             return None
 
-        last_msg = None
-        for line in raw_response.splitlines():
-            s = line.strip()
+        data = response[len("+RECV="):]
+        data_bytes = data if isinstance(data, bytes) else data.encode("latin1", errors="replace")
 
-            if not s or s in {"+RECV=OK", "The list is empty!"} or s.startswith("+RECV:NO DATA"):
-                continue
+        if len(data_bytes) < 2:
+            return None
 
-            if not s.startswith("+RECV="):
-                continue
+        to_id = data_bytes[0]
+        from_id = data_bytes[1]
+        tab_idx = data_bytes.find(b"\t")
+        payload_bytes = data_bytes[tab_idx + 1:] if tab_idx != -1 else data_bytes[2:]
+        payload = payload_bytes.decode("utf-8", errors="replace")
 
-            data = s[len("+RECV="):]
-            data_bytes = data if isinstance(data, bytes) else data.encode("latin1", errors="replace")
+        debug(f"To: {to_id}, From: {from_id}, Payload: {payload}")
 
-            if len(data_bytes) < 2:
-                continue
+        if to_id == self._device_id:
+            value = payload
 
-            to_id = data_bytes[0]
-            from_id = data_bytes[1]
-            tab_idx = data_bytes.find(b"\t")
-            payload_bytes = data_bytes[tab_idx + 1:] if tab_idx != -1 else data_bytes[2:]
-            payload = payload_bytes.decode("utf-8", errors="replace")
-
-            debug(f"To: {to_id}, From: {from_id}, Payload: {payload}")
-
-            if to_id == self._device_id:
-                last_msg = payload
-
-        return last_msg
+        return value
 
     def receive_data(self) -> Optional[str]:
         """
-        Processes received raw data, extracts meaningful payload, and ignores specific
-        irrelevant lines. The function communicates using a command, parses the
-        response, and disregards predefined ignored messages or empty strings. If a
-        valid payload is found, it is returned; otherwise, the function returns None.
+        Processes received data and do extract a relevant portion if available.
 
-        :param self: Instance of the class (implicit parameter for instance methods).
-        :return: Processed payload as a string if it exists, otherwise None.
+        :return: Extracted data as a string if successfully processed, otherwise None.
         :rtype: Optional[str]
         """
-        raw_response = self._send_command('RECV?')
+        value = None
+        response = self._filter_raw_data()
 
-        if not raw_response:
+        if not response:
             return None
 
-        value = None
+        if response.startswith("+RECV="):
+            parts = response.split("\t", 1)
 
-        for line in raw_response.splitlines():
-            if line.strip() in ("+RECV=OK", "The list is empty!"):
-                continue
-
-            if "The list is empty!" in line:
-                line = line.split("The list is empty!")[0].rstrip()
-
-            if line.startswith("+RECV="):
-                parts = line.split("\t", 1)
-                if len(parts) == 2:
-                    value = parts[1]
-                else:
-                    value = line.split(" ", 1)[-1]
+            if len(parts) == 2:
+                value = parts[1]
+            else:
+                value = response.split(" ", 1)[-1]
 
         if value:
             return value
