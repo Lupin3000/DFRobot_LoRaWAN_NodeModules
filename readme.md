@@ -77,11 +77,11 @@ Received payload: Hello (4)
 # start serial send
 (.venv) $ python3 example_serial_send.py
 
-Received payload: Hello (0)
-Received payload: Hello (1)
-Received payload: Hello (2)
-Received payload: Hello (3)
-Received payload: Hello (4)
+Sending payload: Hello (0)
+Sending payload: Hello (1)
+Sending payload: Hello (2)
+Sending payload: Hello (3)
+Sending payload: Hello (4)
 [INFO] Closing application...
 ```
 
@@ -119,14 +119,6 @@ ESP
 ### Run LoRa (P2P) UART example
 
 ```
-# send LoRa payload (example_uart_send.py)
-
-Sending payload: Hello (0)
-Sending payload: Hello (1)
-Sending payload: Hello (2)
-Sending payload: Hello (3)
-Sending payload: Hello (4)
-
 # receive LoRa payload (example_uart_receive.py)
 
 Received payload: Hello (0)
@@ -134,4 +126,12 @@ Received payload: Hello (1)
 Received payload: Hello (2)
 Received payload: Hello (3)
 Received payload: Hello (4)
+
+# send LoRa payload (example_uart_send.py)
+
+Sending payload: Hello (0)
+Sending payload: Hello (1)
+Sending payload: Hello (2)
+Sending payload: Hello (3)
+Sending payload: Hello (4)
 ```
