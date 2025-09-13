@@ -31,7 +31,7 @@ Follow the provided links to purchase the LoRaWAN Node Modules.
 - [EU 868](https://www.dfrobot.com/product-2926.html?tracking=Mszf2HlGMStAAKkFfhNgg3QhFFchlilhR47u9vXX9o9Ko6giJYRJQdmwZjbDIvMV)
 - [US 915](https://www.dfrobot.com/product-2927.html?tracking=Mszf2HlGMStAAKkFfhNgg3QhFFchlilhR47u9vXX9o9Ko6giJYRJQdmwZjbDIvMV)
 
-Ensure that the protocol switch is set to UART on the LoRaWAN Node module.
+Ensure that the protocol switch is set to UART (_for Serial/UART_) on the LoRaWAN Node module.
 
 ![i2c_uart_switch.jpg](img/i2c_uart_switch.jpg)
 
