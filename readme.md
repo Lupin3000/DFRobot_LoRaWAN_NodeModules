@@ -111,11 +111,11 @@ The MicroPython UART module supports LoRa and LoRaWAN modes for EU868/US915/CN47
 (.venv) $ pip3 freeze
 ```
 
-If MicroPython is not flashed on the ESP device, download the latest firmware from [MicroPython](https://micropython.org/download/). The next step is to flash the MicroPython firmware on the ESP device via the esptool.
+If MicroPython is not flashed on the ESP device, download the latest firmware from [MicroPython](https://micropython.org/download/). The next step is to flash the MicroPython firmware on the ESP device via the [esptool](https://github.com/espressif/esptool).
 
 > **Note:** In case you are not familiar with command line tools like esptool, or you don't know what firmware you need, try [MicroPython-Firmware-Studio](https://github.com/Lupin3000/MicroPython-Firmware-Studio). The tool provides a graphical user interface to flash MicroPython firmware on the ESP device.
 
-After that, use rshell to connect to the ESP device and upload the required directories and files. Rename the P2P example files like `example_uart_*.py` to `main.py`!
+After that, use [rshell](https://github.com/dhylands/rshell) to connect to the ESP device and upload the required directories and files. Rename the P2P example files like `example_uart_*.py` to `main.py`!
 
 ```
 ESP
