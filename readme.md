@@ -31,8 +31,9 @@ $ .\.venv\Scripts\activate
 
 Follow the provided links to purchase the LoRaWAN Node Modules.
 
-- [EU 868](https://www.dfrobot.com/product-2926.html?tracking=Mszf2HlGMStAAKkFfhNgg3QhFFchlilhR47u9vXX9o9Ko6giJYRJQdmwZjbDIvMV)
-- [US 915](https://www.dfrobot.com/product-2927.html?tracking=Mszf2HlGMStAAKkFfhNgg3QhFFchlilhR47u9vXX9o9Ko6giJYRJQdmwZjbDIvMV)
+- [EU 868 LoRaWAN Node Module](https://www.dfrobot.com/product-2926.html?tracking=Mszf2HlGMStAAKkFfhNgg3QhFFchlilhR47u9vXX9o9Ko6giJYRJQdmwZjbDIvMV)
+- [US 915 LoRaWAN Node Module](https://www.dfrobot.com/product-2927.html?tracking=Mszf2HlGMStAAKkFfhNgg3QhFFchlilhR47u9vXX9o9Ko6giJYRJQdmwZjbDIvMV)
+- [USB to Serial Converter](https://www.dfrobot.com/product-2291.html?tracking=Mszf2HlGMStAAKkFfhNgg3QhFFchlilhR47u9vXX9o9Ko6giJYRJQdmwZjbDIvMV) (_optional for Python Serial_)
 
 Ensure that the protocol switch is set to UART (_for Python Serial and MicroPython UART_) on the LoRaWAN Node module.
 
