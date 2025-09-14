@@ -85,12 +85,38 @@ class NodeModuleDriver:
         return response or None
 
     def _receive_raw_data(self):
-        raw_data = self._send_command('RECV')
+        raw_data = self._send_command('RECV?')
 
         if not raw_data:
             return None
         else:
             return raw_data
+
+    def _filter_raw_data(self):
+        filtered_data = None
+        raw_response = self._receive_raw_data()
+
+        if not raw_response:
+            return None
+
+        for line in raw_response.splitlines():
+            s = line.strip()
+
+            if not s or s in {"+RECV=OK", "The list is empty!"} or s.startswith("+RECV:NO DATA"):
+                continue
+
+            if not s.startswith("+RECV="):
+                continue
+
+            if s.startswith("+RECV="):
+                for junk in ("+RECV=OK", "The list is empty!", "+RECV:NO DATA", "OK", "ERROR"):
+                    pos = s.find(junk)
+                    if pos != -1:
+                        line = s[:pos].strip()
+
+            filtered_data = line
+
+        return filtered_data
 
     def set_lora_mode(self, mode: str):
         if mode not in self._VALID_LORA_MODES:
@@ -332,23 +358,43 @@ class NodeModuleDriver:
 
         self._send_command(f'SEND={payload}')
 
+    def receive_specific_data(self):
+        value = None
+        response = self._filter_raw_data()
+
+        if not response:
+            return None
+
+        data = response[len("+RECV="):]
+        data_bytes = data if isinstance(data, bytes) else data.encode("latin1")
+
+        if len(data_bytes) < 2:
+            return None
+
+        to_id = data_bytes[0]
+        tab_idx = data_bytes.find(b"\t")
+        payload_bytes = data_bytes[tab_idx + 1:] if tab_idx != -1 else data_bytes[2:]
+        payload = payload_bytes.decode("utf-8")
+
+        if to_id == self._device_id:
+            value = payload
+
+        return value
+
     def receive_data(self):
         value = None
-        raw_response = self._send_command('RECV?')
+        response = self._filter_raw_data()
 
-        for line in raw_response.splitlines():
-            if line.strip() in ("+RECV=OK", "The list is empty!"):
-                continue
+        if not response:
+            return None
 
-            if "The list is empty!" in line:
-                line = line.split("The list is empty!")[0].rstrip()
+        if response.startswith("+RECV="):
+            parts = response.split("\t", 1)
 
-            if line.startswith("+RECV="):
-                parts = line.split("\t", 1)
-                if len(parts) == 2:
-                    value = parts[1]
-                else:
-                    value = line.split(" ", 1)[-1]
+            if len(parts) == 2:
+                value = parts[1]
+            else:
+                value = response.split(" ", 1)[-1]
 
         if value:
             return value
