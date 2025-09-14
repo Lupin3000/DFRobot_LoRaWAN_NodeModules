@@ -151,6 +151,10 @@ Sending payload: Hello (3)
 Sending payload: Hello (4)
 ```
 
+## API Reference
+
+Here you can find the [API reference](./readme_api.md) for the Python and MicroPython modules.
+
 ## Important
 
 **The code is provided without any guarantee.** Use it at your own risk. The developer assumes no liability for any damage or legal consequences resulting from using the software. Please ensure compliance with all applicable laws and regulations when using this software.
