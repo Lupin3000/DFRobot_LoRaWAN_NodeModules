@@ -39,6 +39,21 @@ Ensure that the protocol switch is set to UART (_for Python Serial and MicroPyth
 
 ![i2c_uart_switch.jpg](img/i2c_uart_switch.jpg)
 
+## Find USB devices
+
+Here you can find the examples for commands to find the USB devices on your system.
+
+```
+# Linux
+$ ls /dev/ttyUSB*
+
+# macOS
+$ ls /dev/cu.usb*
+
+# Windows
+$ Get-WMIObject Win32_SerialPort | Select-Object DeviceID, Name
+```
+
 ## Python (_serial_)
 
 The Python serial module supports LoRa and LoRaWAN modes for EU868/US915/CN470.
