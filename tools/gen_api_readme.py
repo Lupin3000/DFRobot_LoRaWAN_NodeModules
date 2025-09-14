@@ -17,7 +17,7 @@ def clean_docstring(doc: str) -> str:
     filtered = []
 
     for line in lines:
-        if re.match(r"^\s*:", line):  # Zeilen, die mit : anfangen -> skip
+        if re.match(r"^\s*:", line):
             continue
 
         filtered.append(line)
@@ -52,9 +52,9 @@ def generate_markdown(source_path: str) -> str:
                 prefix = "async " if isinstance(m, ast.AsyncFunctionDef) else ""
                 lines.append(f"### {prefix}{m.name}")
                 lines.append("")
-                raw_doc = ast.get_docstring(m) or "_Keine Beschreibung._"
+                raw_doc = ast.get_docstring(m) or "_No Description._"
                 mdoc = clean_docstring(textwrap.dedent(raw_doc))
-                lines.append(mdoc if mdoc else "_Keine Beschreibung._")
+                lines.append(mdoc if mdoc else "_No Description._")
                 lines.append("")
 
     return "\n".join(lines)
